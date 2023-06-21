@@ -1,0 +1,28 @@
+{
+  "name": "anova-oven-forwarder",
+  "private": true,
+  "license": "ISC",
+  "version": "2.3.0",
+  "scripts": {
+    "start": "node server.js",
+    "build-image": "scripts/build-image.sh",
+    "push-image": "scripts/build-image.sh",
+    "run-container": "scripts/run-container.sh"
+  },
+  "dependencies": {
+    "@influxdata/influxdb-client": "^1.33.2",
+    "cabin": "^13.2.4",
+    "date-fns": "^2.30.0",
+    "dotenv": "^16.0.3",
+    "jwks-rsa": "^3.0.1",
+    "koa": "^2.14.2",
+    "koa-better-request-id": "^1.2.0",
+    "koa-better-response-time": "^1.2.0",
+    "koa-jwt": "^4.0.4",
+    "koa-router": "^12.0.0",
+    "request-received": "^0.0.3",
+    "uuid": "^9.0.0",
+    "ws": "^8.13.0"
+  },
+  "type": "module"
+}
