@@ -2,11 +2,11 @@
   "name": "anova-oven-forwarder",
   "private": true,
   "license": "ISC",
-  "version": "2.3.0",
+  "version": "3.0.1",
   "scripts": {
     "start": "node server.js",
     "build-image": "scripts/build-image.sh",
-    "push-image": "scripts/build-image.sh",
+    "push-image": "scripts/push-image.sh",
     "run-container": "scripts/run-container.sh"
   },
   "dependencies": {

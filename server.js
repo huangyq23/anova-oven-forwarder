@@ -83,6 +83,9 @@ app.use(cabin.middleware);
 
 app.use(function (ctx, next) {
     return next().catch((err) => {
+        const errorMessages = err?.message ?? 'Unknown error';
+        ctx.logger.error(errorMessages);
+
         if (401 == err.status) {
             ctx.status = 401;
             ctx.body = {
@@ -94,7 +97,7 @@ app.use(function (ctx, next) {
             ctx.status = err.status;
             ctx.body = {
                 error: {
-                    message: err.message,
+                    message: errorMessages,
                 },
             };
         }
@@ -130,15 +133,21 @@ router.get("/ping", async (ctx) => {
     ctx.body = { status: "OK" };
 });
 
+router.get("/requestDiagnostic", async (ctx) => {
+    ctx.wsManager.requestDiagnostic();
+    ctx.status = 200;
+    ctx.body = { status: "OK" };
+});
+
 router.post("/airFry", async (ctx) => {
-    ctx.wsManager.airFry(DEVICE_ID);
+    ctx.wsManager.airFry();
     ctx.body = {
         success: true,
     };
 });
 
 router.post("/stop", async (ctx) => {
-    ctx.wsManager.stopCook(DEVICE_ID);
+    ctx.wsManager.stopCook();
     ctx.body = {
         success: true,
     };
