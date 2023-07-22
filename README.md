@@ -1,6 +1,8 @@
 # Anove Oven Forwarder
 A Node.JS service that interacts with the Anova Precision Oven API to record realtime metrics and support automation. 
 
+Find me on Discord [![](https://dcbadge.vercel.app/api/server/TARBUEef)](https://discord.gg/TARBUEef)
+
 ![Grafana](./docs/grafana.png)
 
 ## ⚠️ Disclaimer 
