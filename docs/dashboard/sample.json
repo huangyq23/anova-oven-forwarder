@@ -1,0 +1,2050 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "id": 7,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 33,
+        "panels": [],
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "cook": {
+                    "index": 1,
+                    "text": "Cook"
+                  },
+                  "idle": {
+                    "index": 0,
+                    "text": "Idle"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "string"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 3,
+          "x": 0,
+          "y": 1
+        },
+        "id": 9,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^mode$/",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "query": "from(bucket: \"anova-oven-data\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"state\")\n  |> filter(fn: (r) => r[\"_field\"] == \"mode\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\", \"ovenId\"])\n  |> sort(columns: [\"_time\"])\n  |> last()",
+            "refId": "A"
+          }
+        ],
+        "title": "Oven State",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "true",
+                  "result": {
+                    "color": "green",
+                    "index": 0,
+                    "text": "Closed"
+                  }
+                },
+                "type": "special"
+              },
+              {
+                "options": {
+                  "match": "false",
+                  "result": {
+                    "color": "orange",
+                    "index": 1,
+                    "text": "Open"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bool"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 2,
+          "x": 3,
+          "y": 1
+        },
+        "id": 11,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^door\\-closed$/",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"door-closed\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\", \"ovenId\"])\n  |> sort(columns: [\"_time\"])\n  |> last()",
+            "refId": "A"
+          }
+        ],
+        "title": "Door",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "true",
+                  "result": {
+                    "color": "orange",
+                    "index": 0,
+                    "text": "On"
+                  }
+                },
+                "type": "special"
+              },
+              {
+                "options": {
+                  "match": "false",
+                  "result": {
+                    "color": "green",
+                    "index": 1,
+                    "text": "Off"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bool"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 2,
+          "x": 5,
+          "y": 1
+        },
+        "id": 12,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^lamp\\-on$/",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"lamp-on\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\", \"ovenId\"])\n  |> last()",
+            "refId": "A"
+          }
+        ],
+        "title": "Lamp",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "true",
+                  "result": {
+                    "index": 0,
+                    "text": "Open"
+                  }
+                },
+                "type": "special"
+              },
+              {
+                "options": {
+                  "match": "false",
+                  "result": {
+                    "index": 1,
+                    "text": "Closed"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bool"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 2,
+          "x": 7,
+          "y": 1
+        },
+        "id": 16,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^vent\\-open$/",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"vent-open\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\", \"ovenId\"])\n  |> last()",
+            "refId": "A"
+          }
+        ],
+        "title": "Vent",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "idle": {
+                    "index": 2,
+                    "text": "Idle"
+                  },
+                  "relative-humidity": {
+                    "index": 1,
+                    "text": "Relative Humidity"
+                  },
+                  "steam-percentage": {
+                    "index": 0,
+                    "text": "Steam Percentage"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "bool"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 2,
+          "x": 9,
+          "y": 1
+        },
+        "id": 38,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^steam\\-mode$/",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"steam-mode\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\", \"ovenId\"])\n  |> last()",
+            "refId": "A"
+          }
+        ],
+        "title": "Steam Mode",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "match": "true",
+                  "result": {
+                    "index": 0,
+                    "text": "Connected"
+                  }
+                },
+                "type": "special"
+              },
+              {
+                "options": {
+                  "match": "false",
+                  "result": {
+                    "index": 1,
+                    "text": "Disconnected"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 3,
+          "x": 11,
+          "y": 1
+        },
+        "id": 10,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^probe\\-connected$/",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"probe-connected\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\", \"ovenId\"])\n  |> sort(columns: [\"_time\"])\n  |> last()",
+            "refId": "A"
+          }
+        ],
+        "title": "Probe",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 1,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "kwatth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 3,
+          "x": 14,
+          "y": 1
+        },
+        "id": 17,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "import \"strings\"\n\nfrom(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] =~ /watts$/)\n  |> map(fn: (r) => ({r with _value: float(v: r._value) / 1000.0}))\n  |> integral(unit: 1h)\n  |> duplicate(column: \"_stop\", as: \"_time\")\n\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Energy",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "reduce",
+            "options": {
+              "includeTimeField": false,
+              "mode": "seriesToRows",
+              "reducers": [
+                "sum"
+              ]
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 1,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "kwatth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 3,
+          "x": 17,
+          "y": 1
+        },
+        "id": 39,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "import \"strings\"\n\nfrom(bucket: \"${bucket}\")\n  |> range(start: -24h)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] =~ /watts$/)\n  |> map(fn: (r) => ({r with _value: float(v: r._value) / 1000.0}))\n  |> integral(unit: 1h)\n  |> duplicate(column: \"_stop\", as: \"_time\")\n\n",
+            "refId": "A"
+          }
+        ],
+        "title": "24h Energy",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "reduce",
+            "options": {
+              "includeTimeField": false,
+              "mode": "seriesToRows",
+              "reducers": [
+                "sum"
+              ]
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "decimals": 1,
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "kwatth"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 20,
+          "y": 1
+        },
+        "id": 40,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "sum"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "import \"strings\"\n\nfrom(bucket: \"${bucket}\")\n  |> range(start: -30d)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] =~ /watts$/)\n  |> map(fn: (r) => ({r with _value: float(v: r._value) / 1000.0}))\n  |> integral(unit: 1h)\n  |> duplicate(column: \"_stop\", as: \"_time\")\n\n",
+            "refId": "A"
+          }
+        ],
+        "title": "30d Energy",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "reduce",
+            "options": {
+              "includeTimeField": false,
+              "mode": "seriesToRows",
+              "reducers": [
+                "sum"
+              ]
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "dthms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 9,
+          "x": 0,
+          "y": 4
+        },
+        "id": 22,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "vertical",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"timer-current\" or r[\"_field\"] == \"timer-inital\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\", \"ovenId\"])\n  |> last()",
+            "refId": "A"
+          }
+        ],
+        "title": "Timer Set",
+        "transformations": [
+          {
+            "id": "calculateField",
+            "options": {
+              "alias": "Time ",
+              "binary": {
+                "left": "timer-inital nodes",
+                "operator": "-",
+                "reducer": "sum",
+                "right": "timer-current nodes"
+              },
+              "mode": "binary",
+              "reduce": {
+                "reducer": "sum"
+              }
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {
+                "Time": 0,
+                "Time ": 2,
+                "timer-current nodes": 3,
+                "timer-inital nodes": 1
+              },
+              "renameByName": {
+                "Time": "",
+                "Time ": "Time Elapsed",
+                "timer-current nodes": "Time Remaining",
+                "timer-inital nodes": "Time Total"
+              }
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watt"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 15,
+          "x": 9,
+          "y": 4
+        },
+        "id": 8,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "import \"strings\"\n\nfrom(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] =~ /watts$/)\n  |> drop(columns: [\"host\", \"ovenId\", \"_measurement\"])\n  |> sort(columns: [\"_time\"])\n  |> last()\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Oven Power",
+        "transformations": [
+          {
+            "id": "calculateField",
+            "options": {
+              "mode": "reduceRow",
+              "reduce": {
+                "include": [
+                  "boiler-watts",
+                  "evaporator-watts",
+                  "heating-bottom-watts",
+                  "heating-rear-watts",
+                  "heating-top-watts"
+                ],
+                "reducer": "sum"
+              },
+              "replaceFields": false
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {
+                "Time": 0,
+                "Total": 6,
+                "boiler-watts": 5,
+                "evaporator-watts": 1,
+                "heating-bottom-watts": 2,
+                "heating-rear-watts": 3,
+                "heating-top-watts": 4
+              },
+              "renameByName": {
+                "Total": "",
+                "boiler-watts": "Boiler",
+                "evaporator-watts": "Evaporator",
+                "heating-bottom-watts": "Bottom Heating",
+                "heating-rear-watts": "Rear Heating",
+                "heating-top-watts": "Top Heating"
+              }
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 8
+        },
+        "id": 28,
+        "panels": [],
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 250,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "orange",
+                  "value": 60
+                },
+                {
+                  "color": "red",
+                  "value": 110
+                }
+              ]
+            },
+            "unit": "degree"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4.8,
+          "x": 0,
+          "y": 9
+        },
+        "id": 7,
+        "maxPerRow": 6,
+        "options": {
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "pluginVersion": "9.5.3",
+        "repeat": "tempSources",
+        "repeatDirection": "h",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "query": "import \"date\"\n\nfrom(bucket: \"${bucket}\")\n  |> range(start: date.sub(d: 2m, from: v.timeRangeStop), stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"$tempSources\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> map(fn: (r) => ({r with _value: if \"${tempUnit}\" == \"F\" then r._value * 1.8 + 32.0 else r._value}))\n  |> drop(columns: [\"host\", \"ovenId\"])\n  |> last()\n\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Temperature ($tempSources)",
+        "transformations": [
+          {
+            "id": "joinByField",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {
+                "Time": 0,
+                "dry oven": 1,
+                "dryBottom oven": 2,
+                "dryTop oven": 3,
+                "probe oven": 5,
+                "wet oven": 4
+              },
+              "renameByName": {
+                "Time": "",
+                "dry nodes": "Dry",
+                "dry oven": "Dry",
+                "dryBottom nodes": "Dry Bottom",
+                "dryBottom oven": "Dry Bottom",
+                "dryTop nodes": "Dry Top",
+                "dryTop oven": "Dry Top",
+                "probe nodes": "Probe",
+                "probe oven": "Probe",
+                "wet nodes": "Wet",
+                "wet oven": "Wet"
+              }
+            }
+          }
+        ],
+        "type": "gauge"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 14
+        },
+        "id": 27,
+        "panels": [],
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 70,
+              "lineWidth": 0,
+              "spanNulls": false
+            },
+            "displayName": "Door",
+            "mappings": [
+              {
+                "options": {
+                  "cook": {
+                    "color": "orange",
+                    "index": 1,
+                    "text": "Cook"
+                  },
+                  "idle": {
+                    "color": "#808080",
+                    "index": 0,
+                    "text": "Idle"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bool"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 12,
+          "x": 0,
+          "y": 15
+        },
+        "id": 18,
+        "options": {
+          "alignValue": "center",
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "mergeValues": true,
+          "rowHeight": 0.9,
+          "showValue": "auto",
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"state\")\n  |> filter(fn: (r) => r[\"_field\"] == \"mode\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\"])\n\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Oven State",
+        "type": "state-timeline"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "stepBefore",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "watt"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 12,
+          "x": 12,
+          "y": 15
+        },
+        "id": 5,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] =~ /watts$/)\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\", \"ovenId\"])\n\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Oven Power",
+        "transformations": [
+          {
+            "id": "calculateField",
+            "options": {}
+          }
+        ],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 70,
+              "lineWidth": 0,
+              "spanNulls": false
+            },
+            "displayName": "Door",
+            "mappings": [
+              {
+                "options": {
+                  "match": "false",
+                  "result": {
+                    "color": "yellow",
+                    "index": 0,
+                    "text": "Open"
+                  }
+                },
+                "type": "special"
+              },
+              {
+                "options": {
+                  "match": "true",
+                  "result": {
+                    "color": "green",
+                    "index": 1,
+                    "text": "Closed"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bool"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 12,
+          "x": 0,
+          "y": 18
+        },
+        "id": 1,
+        "options": {
+          "alignValue": "center",
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "mergeValues": true,
+          "rowHeight": 0.9,
+          "showValue": "auto",
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"door-closed\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\"])\n\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Door",
+        "type": "state-timeline"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "degree"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 21
+        },
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"dry\" or r[\"_field\"] == \"dryTop\" or r[\"_field\"] == \"wet\" or r[\"_field\"] == \"dryBottom\" or r[\"_field\"] == \"probe\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> map(fn: (r) => ({r with _value: if \"${tempUnit}\" == \"F\" then r._value * 1.8 + 32.0 else r._value}))\n  |> drop(columns: [\"host\", \"ovenId\"])\n\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Oven Sensors",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 12,
+          "y": 26
+        },
+        "id": 13,
+        "options": {
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^fan\\-speed$/",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"fan-speed\")\n  |> drop(columns: [\"host\", \"ovenId\"])\n  |> last()\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Fan Speed",
+        "transformations": [],
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 9,
+          "x": 15,
+          "y": 26
+        },
+        "id": 14,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "pluginVersion": "9.5.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"fan-speed\")\n  |> drop(columns: [\"host\", \"ovenId\"])\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Fan Speed",
+        "transformations": [],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "humidity"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 12,
+          "y": 30
+        },
+        "id": 6,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"relative-humidity\" or r[\"_field\"] == \"relative-humidity-setpoint\" or r[\"_field\"] == \"steam-percentage-setpoint\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\", \"ovenId\"])",
+            "refId": "A"
+          }
+        ],
+        "title": "Humidity and Steam",
+        "transformations": [],
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 70,
+              "lineWidth": 0,
+              "spanNulls": false
+            },
+            "displayName": "Light",
+            "mappings": [
+              {
+                "options": {
+                  "match": "false",
+                  "result": {
+                    "color": "green",
+                    "index": 0,
+                    "text": "Off"
+                  }
+                },
+                "type": "special"
+              },
+              {
+                "options": {
+                  "match": "true",
+                  "result": {
+                    "color": "yellow",
+                    "index": 1,
+                    "text": "On"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bool"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 12,
+          "x": 0,
+          "y": 31
+        },
+        "id": 3,
+        "options": {
+          "alignValue": "center",
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "mergeValues": true,
+          "rowHeight": 0.9,
+          "showValue": "auto",
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"lamp-on\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\"])\n\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Light",
+        "type": "state-timeline"
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 70,
+              "lineWidth": 0,
+              "spanNulls": false
+            },
+            "displayName": "Vent",
+            "mappings": [
+              {
+                "options": {
+                  "match": "false",
+                  "result": {
+                    "index": 0,
+                    "text": "Close"
+                  }
+                },
+                "type": "special"
+              },
+              {
+                "options": {
+                  "match": "true",
+                  "result": {
+                    "index": 1,
+                    "text": "Open"
+                  }
+                },
+                "type": "special"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "bool"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 12,
+          "x": 0,
+          "y": 34
+        },
+        "id": 4,
+        "options": {
+          "alignValue": "center",
+          "legend": {
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": false
+          },
+          "mergeValues": true,
+          "rowHeight": 0.9,
+          "showValue": "auto",
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+            },
+            "key": "Q-6f779246-3889-4215-ae28-3c942a6f0583-0",
+            "query": "from(bucket: \"${bucket}\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"nodes\")\n  |> filter(fn: (r) => r[\"_field\"] == \"vent-open\")\n  |> filter(fn: (r) => r[\"ovenId\"] == \"${ovenId}\")\n  |> drop(columns: [\"host\"])\n\n",
+            "refId": "A"
+          }
+        ],
+        "title": "Vent",
+        "type": "state-timeline"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "isNone": true,
+            "selected": false,
+            "text": "None",
+            "value": ""
+          },
+          "datasource": {
+            "type": "influxdb",
+            "uid": "be4f3655-e384-4a08-a944-81cdfdceca3d"
+          },
+          "definition": "import \"influxdata/influxdb/v1\"\nv1.tagValues(\n    bucket: \"anova-oven-data\",\n    tag: \"ovenId\",\n    predicate: (r) => true,\n    start: -1d\n)",
+          "hide": 0,
+          "includeAll": false,
+          "label": "Oven ID",
+          "multi": false,
+          "name": "ovenId",
+          "options": [],
+          "query": "import \"influxdata/influxdb/v1\"\nv1.tagValues(\n    bucket: \"anova-oven-data\",\n    tag: \"ovenId\",\n    predicate: (r) => true,\n    start: -1d\n)",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "hide": 2,
+          "name": "bucket",
+          "query": "anova-oven-data",
+          "skipUrlSync": false,
+          "type": "constant"
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "hide": 2,
+          "includeAll": true,
+          "multi": true,
+          "name": "tempSources",
+          "options": [
+            {
+              "selected": true,
+              "text": "All",
+              "value": "$__all"
+            },
+            {
+              "selected": false,
+              "text": "dry",
+              "value": "dry"
+            },
+            {
+              "selected": false,
+              "text": "wet",
+              "value": "wet"
+            },
+            {
+              "selected": false,
+              "text": "dryTop",
+              "value": "dryTop"
+            },
+            {
+              "selected": false,
+              "text": "dryBottom",
+              "value": "dryBottom"
+            },
+            {
+              "selected": false,
+              "text": "probe",
+              "value": "probe"
+            }
+          ],
+          "query": "dry, wet, dryTop, dryBottom, probe",
+          "queryValue": "",
+          "skipUrlSync": false,
+          "type": "custom"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "F",
+            "value": "f"
+          },
+          "hide": 0,
+          "includeAll": false,
+          "label": "Temperature Unit",
+          "multi": false,
+          "name": "tempUnit",
+          "options": [
+            {
+              "selected": true,
+              "text": "ºC",
+              "value": "C"
+            },
+            {
+              "selected": false,
+              "text": "ºF",
+              "value": "F"
+            }
+          ],
+          "query": "ºC : C, ºF : F",
+          "queryValue": "",
+          "skipUrlSync": false,
+          "type": "custom"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-30m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Anova Oven New",
+    "uid": "d2da4745-dea3-4d05-805f-c094a1f840f6",
+    "version": 14,
+    "weekStart": ""
+  }

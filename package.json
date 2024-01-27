@@ -2,7 +2,7 @@
   "name": "anova-oven-forwarder",
   "private": true,
   "license": "ISC",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.2",
+    "axe": "^12.2.3",
     "cabin": "^13.2.4",
     "date-fns": "^2.30.0",
     "dotenv": "^16.0.3",
@@ -30,6 +31,7 @@
   "type": "module",
   "devDependencies": {
     "eslint": "^8.44.0",
+    "knip": "^4.2.1",
     "prettier-eslint": "^15.0.1"
   }
 }
