@@ -76,6 +76,8 @@ if (MQTT_ENABLED) {
     );
 
     await mqttManager.connect();
+
+    wsManager.subscribe("EVENT_APO_STATE", (response) => mqttManager.publish('anova-oven-forwarder', response));
 }
 
 if (API_SERVER_ENABLED) {
