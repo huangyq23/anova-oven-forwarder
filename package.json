@@ -26,7 +26,7 @@
     "mqtt": "^4.3.7",
     "request-received": "^0.0.3",
     "uuid": "^9.0.0",
-    "ws": "^8.13.0"
+    "ws": "^8.17.1"
   },
   "type": "module",
   "devDependencies": {
