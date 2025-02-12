@@ -18,7 +18,7 @@
     "date-fns": "^2.30.0",
     "dotenv": "^16.0.3",
     "jwks-rsa": "^3.0.1",
-    "koa": "^2.14.2",
+    "koa": "^2.15.4",
     "koa-better-request-id": "^1.2.0",
     "koa-better-response-time": "^1.2.0",
     "koa-jwt": "^4.0.4",
